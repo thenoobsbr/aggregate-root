@@ -1,4 +1,12 @@
-﻿trigger:
+﻿parameters:
+  - name: pool
+    type: string
+    default: 'Self-hosted'
+    values:
+    - 'Azure Pipelines'
+    - 'Self-hosted'
+
+trigger:
   tags:
     include:
       - '*'
@@ -28,6 +36,6 @@ stages:
   - template: templates/library_build.yml@templates
     parameters:
       pool: 'Self-hosted'
-      target_frameworks:
-        - netstandard2.0
-        - net6.0
+  - template: templates/library_deploy.yml@templates
+    parameters:
+      pool: 'Self-hosted'
