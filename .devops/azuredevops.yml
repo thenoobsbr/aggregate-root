@@ -1,0 +1,37 @@
+﻿trigger:
+  tags:
+    include:
+      - '*'
+
+pr:
+  branches:
+    include:
+      - develop
+      - master
+      - main
+
+resources:
+  repositories:
+    - repository: templates
+      endpoint: thenoobsbr
+      type: github
+      name: TheNoobsBr/Azure-Templates
+      ref: refs/heads/main
+
+variables:
+  - template: variables.yml
+
+stages:
+  - template: templates/gitflow_calculate_version.yml@templates
+    parameters:
+      pool: 'Azure Pipelines'
+  - template: templates/library_build.yml@templates
+    parameters:
+      artifact_name: 'TheNoobs.AggregateRoot'
+      projects: 'src/**/*.csproj'
+      pool: 'Azure Pipelines'
+      depends_on:
+        - gitflow_calculate_version
+      version: $(Build.BuildNumber)
+      sonar_organization: $(SONAR_ORGANIZATION)
+      sonar_project_key: $(SONAR_PROJECTKEY)

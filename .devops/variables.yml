@@ -1,0 +1,3 @@
+﻿variables:
+  - group: aggregate-root
+  - group: sonar
