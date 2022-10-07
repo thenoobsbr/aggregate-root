@@ -2,15 +2,33 @@
 
   <PropertyGroup>
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Authors>Tiago de Carvalho Resende</Authors>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsPackable>true</IsPackable>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <OutputType>library</OutputType>
+    <GenerateFullPaths>true</GenerateFullPaths>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Authors>The Noobs</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <RepositoryType>GIT</RepositoryType>
+    <LangVersion>default</LangVersion>
+    <PackageIcon>icon.png</PackageIcon>
+
+    <PackageId>TheNoobs.AggregateRoot</PackageId>
     <Description>Library with simple implementations for entities and aggregate roots.</Description>
     <PackageProjectUrl>https://github.com/thenoobsbr/aggregate-root</PackageProjectUrl>
     <RepositoryUrl>https://github.com/thenoobsbr/aggregate-root</RepositoryUrl>
     <PackageTags>aggregate; root; domain; driven; ddd; dotnet; abstraction</PackageTags>
-    <LangVersion>default</LangVersion>
+
+    <UserSecretsId>{D53A6D40-9F83-42EB-A3C9-6E1BE91BE0A9}</UserSecretsId>
     <ProjectGuid>{64920D79-0771-4B76-ABF8-9366FE8C42C2}</ProjectGuid>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\images\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>

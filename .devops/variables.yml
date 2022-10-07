@@ -1,3 +1,4 @@
 ﻿variables:
   - group: aggregate-root
   - group: sonar
+  - group: nuget
