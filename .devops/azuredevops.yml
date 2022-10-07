@@ -23,4 +23,11 @@ variables:
 
 stages:
   - template: templates/gitflow_calculate_version.yml@templates
+    parameters:
+      pool: 'Self-hosted'
   - template: templates/library_build.yml@templates
+    parameters:
+      pool: 'Self-hosted'
+      target_frameworks:
+        - netstandard2.0
+        - net6.0
