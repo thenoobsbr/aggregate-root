@@ -11,6 +11,19 @@ public sealed class Id<TId>
     }
 
     public static implicit operator Id<TId>(TId? id) => new(id);
+    public static implicit operator TId?(Id<TId> id) => id._id;
+
+    public static bool operator ==(Id<TId> left, object? right)
+    {
+        if (ReferenceEquals(left, null) && ReferenceEquals(right, null)) return true;
+        if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Id<TId> left, object? right)
+    {
+        return !(left == right);
+    }
 
     public override int GetHashCode()
     {

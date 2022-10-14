@@ -13,6 +13,13 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     {
         Id = id;
     }
+    
+    /// <summary>
+    /// Initializes a new instance.
+    /// </summary>
+    protected Entity() : this(default)
+    {
+    }
 
     /// <summary>
     /// Get Identification.
