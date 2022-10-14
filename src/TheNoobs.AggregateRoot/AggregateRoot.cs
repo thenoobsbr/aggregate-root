@@ -14,14 +14,14 @@ public abstract class AggregateRoot<TId> : Entity<TId>, IAggregateRoot
     /// Initializes a new instance.
     /// </summary>
     /// <param name="id">Aggegate root identification.</param>
-    protected AggregateRoot(TId? id) : base(id)
+    protected AggregateRoot(TId id) : base(id)
     {
     }
 
     /// <summary>
     /// Default constructor.
     /// </summary>
-    protected AggregateRoot() : this(default)
+    protected AggregateRoot()
     {
     }
 

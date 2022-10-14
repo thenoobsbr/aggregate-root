@@ -5,11 +5,13 @@
 /// </summary>
 public abstract class Entity<TId> : IEquatable<Entity<TId>>
 {
+    private readonly Guid _transientId = Guid.NewGuid();
+    
     /// <summary>
     /// Initializes a new instance.
     /// </summary>
     /// <param name="id">Entity identification.</param>
-    protected Entity(TId? id)
+    protected Entity(TId id)
     {
         Id = id;
     }
@@ -17,14 +19,14 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     /// <summary>
     /// Initializes a new instance.
     /// </summary>
-    protected Entity() : this(default)
+    protected Entity() : this(default!)
     {
     }
 
     /// <summary>
     /// Get Identification.
     /// </summary>
-    public Id<TId> Id { get; }
+    public TId Id { get; }
 
     /// <summary>
     /// Compare current entity to another entity.
@@ -48,7 +50,12 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
             return false;
         }
 
-        return other.Id.Equals(Id);
+        if (Equals(Id, default(TId)) || Equals(other.Id, default(TId)))
+        {
+            return false;
+        }
+
+        return other.Id!.Equals(Id);
     }
 
     /// <summary>
@@ -88,6 +95,9 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     /// <inheritdoc cref="Object"/>
     public override int GetHashCode()
     {
-        return Id.GetHashCode();
+        return
+            Equals(Id, default(TId))
+                ? _transientId.GetHashCode()
+                : Id!.GetHashCode();
     }
 }
