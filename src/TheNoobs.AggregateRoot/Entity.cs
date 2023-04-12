@@ -26,7 +26,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     /// <summary>
     /// Get Identification.
     /// </summary>
-    public TId Id { get; }
+    public TId Id { get; private set; }
 
     /// <summary>
     /// Compare current entity to another entity.
