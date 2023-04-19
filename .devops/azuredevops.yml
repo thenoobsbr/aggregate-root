@@ -2,7 +2,7 @@
   - name: pool
     displayName: 'Agent Pool'
     type: string
-    default: 'Self-hosted'
+    default: 'Azure Pipelines'
     values:
     - 'Azure Pipelines'
     - 'Self-hosted'
