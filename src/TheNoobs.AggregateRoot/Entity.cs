@@ -177,7 +177,7 @@ public abstract class Entity<TId, TExternalId> : Entity<TId>
             return (TExternalId)Convert.ChangeType(externalId, typeof(TExternalId));
         }
 
-        throw new NotImplementedException(
+        throw new NotSupportedException(
             $"Default implementation of {nameof(ExternalIdGenerator)} does not have a generator strategy for " +
             $"{typeof(TExternalId).Name}. To implement a new strategy, override the {nameof(ExternalIdGenerator)} " +
             "default implementation.");

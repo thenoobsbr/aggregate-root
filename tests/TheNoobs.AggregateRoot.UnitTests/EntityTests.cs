@@ -136,4 +136,13 @@ public class EntityTests
             Execute.Assertion.FailWith("External Id is not a valid Guid.");
         }
     }
+
+    [Fact(DisplayName = 
+        @"GIVEN entity with custom external id, SHOULD throw exception at creation when no generator is overriden")]
+    public void Given_entity_with_custom_external_id_should_throw_exception_at_creation_when_no_generator_is_overriden()
+    {
+        Action act = () => _ = new OrderItem(1);
+
+        act.Should().Throw<NotSupportedException>();
+    }
 }
