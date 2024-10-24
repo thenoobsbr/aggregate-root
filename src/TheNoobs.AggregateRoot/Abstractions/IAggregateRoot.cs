@@ -2,6 +2,9 @@
 
 public interface IAggregateRoot
 {
+    /// <summary>
+    /// Get read only list of domain events. 
+    /// </summary>
     IReadOnlyCollection<IDomainEvent> DomainEvents { get; }
 
     /// <summary>

@@ -1,6 +1,6 @@
 ﻿namespace TheNoobs.AggregateRoot.UnitTests.Stubs;
 
-public class Person : AggregateRoot<long>
+public class Person : AggregateRoot<long, Guid>
 {
     public Person(long id, string name) : base(id)
     {
