@@ -3,19 +3,20 @@
 /// <summary>
 /// Abstract class of entity.
 /// </summary>
-public abstract class Entity<TId> : IEquatable<Entity<TId>>
+/// <typeparam name="TId">The type of the entity identification.</typeparam>
+public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatable<TId>
 {
     private readonly Guid _transientId = Guid.NewGuid();
-    
+
     /// <summary>
-    /// Initializes a new instance.
+    /// Initializes a new instance, explicitly setting an identification.
     /// </summary>
     /// <param name="id">Entity identification.</param>
     protected Entity(TId id)
     {
         Id = id;
     }
-    
+
     /// <summary>
     /// Initializes a new instance.
     /// </summary>
@@ -55,7 +56,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
             return false;
         }
 
-        return other.Id!.Equals(Id);
+        return other.Id.Equals(Id);
     }
 
     /// <summary>
@@ -92,12 +93,93 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
         return !(left == right);
     }
 
+    private object GetId()
+    {
+        return Equals(Id, default(TId)) ? _transientId : Id;
+    }
+
     /// <inheritdoc cref="Object"/>
     public override int GetHashCode()
     {
-        return
-            Equals(Id, default(TId))
-                ? _transientId.GetHashCode()
-                : Id!.GetHashCode();
+        return GetId().GetHashCode();
+    }
+}
+
+/// <summary>
+/// Abstract class of entities with an external identification.
+/// </summary>
+/// <typeparam name="TId">The type of the entity identification.</typeparam>
+/// <typeparam name="TExternalId">The type of the entity external identification.</typeparam>
+public abstract class Entity<TId, TExternalId> : Entity<TId>
+    where TId : IEquatable<TId>
+    where TExternalId : IEquatable<TExternalId>
+{
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
+    protected Entity()
+    {
+        InitializeExternalId();
+    }
+
+    /// <summary>
+    /// Initializes a new instance, explicitly setting an identification.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    protected Entity(TId id) : base(id)
+    {
+        InitializeExternalId();
+    }
+
+    /// <summary>
+    /// Initializes a new instance, explicitly setting both identification and external identification.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    /// <param name="externalId">Entity external identification.</param>
+    protected Entity(TId id, TExternalId externalId) : base(id)
+    {
+        ExternalId = externalId;
+    }
+
+    /// <summary>
+    /// Gets the external identification of the entity.
+    /// </summary>
+    public TExternalId ExternalId { get; private set; } = default!;
+
+    private void InitializeExternalId()
+    {
+        ExternalId = ExternalIdGenerator();
+    }
+
+    /// <summary>
+    /// The default implementation to generate new external identifications.
+    /// </summary>
+    /// <returns>A unique external identification to be used when creating a new entity.</returns>
+    /// <remarks>
+    /// This default implementation only supports generating Guids as external identifications.
+    /// To implement the generation of a new type of external identification, override the
+    /// <see cref="ExternalIdGenerator"/> method.
+    /// </remarks>
+    /// <exception cref="NotImplementedException">
+    /// Throws when the type of the external identification is not a Guid.
+    /// </exception>
+    protected virtual TExternalId ExternalIdGenerator()
+    {
+        object? externalId = null;
+        
+        if (typeof(TExternalId) == typeof(Guid))
+        {
+            externalId = Guid.NewGuid();
+        }
+
+        if (externalId is not null)
+        {
+            return (TExternalId)Convert.ChangeType(externalId, typeof(TExternalId));
+        }
+
+        throw new NotSupportedException(
+            $"Default implementation of {nameof(ExternalIdGenerator)} does not have a generator strategy for " +
+            $"{typeof(TExternalId).Name}. To implement a new strategy, override the {nameof(ExternalIdGenerator)} " +
+            "default implementation.");
     }
 }

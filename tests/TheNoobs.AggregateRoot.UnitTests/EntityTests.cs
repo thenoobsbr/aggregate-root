@@ -1,4 +1,5 @@
 using FluentAssertions;
+using FluentAssertions.Execution;
 using TheNoobs.AggregateRoot.UnitTests.Stubs;
 
 namespace TheNoobs.AggregateRoot.UnitTests;
@@ -109,5 +110,39 @@ public class EntityTests
         Person? person = null;
 
         (person! == null!).Should().BeTrue();
+    }
+
+    [Fact(DisplayName = @"GIVEN entity, SHOULD define external identification at creation")]
+    public void Given_entity_should_define_external_identification_at_creation()
+    {
+        var person = new Person(1, "Name of person");
+
+        person.ExternalId.Should().NotBeEmpty();
+    }
+
+    [Fact(DisplayName = @"GIVEN entity with custom external id, SHOULD define external identification at creation")]
+    public void Given_entity_with_custom_external_id_should_define_external_identification_at_creation()
+    {
+        var order = new Order(1);
+
+        order.ExternalId.Should().NotBeEmpty();
+
+        if (Guid.TryParse(order.ExternalId, out var externalIdAsGuid))
+        {
+            externalIdAsGuid.Should().NotBeEmpty();
+        }
+        else
+        {
+            Execute.Assertion.FailWith("External Id is not a valid Guid.");
+        }
+    }
+
+    [Fact(DisplayName = 
+        @"GIVEN entity with custom external id, SHOULD throw exception at creation when no generator is overriden")]
+    public void Given_entity_with_custom_external_id_should_throw_exception_at_creation_when_no_generator_is_overriden()
+    {
+        Action act = () => _ = new OrderItem(1);
+
+        act.Should().Throw<NotSupportedException>();
     }
 }
