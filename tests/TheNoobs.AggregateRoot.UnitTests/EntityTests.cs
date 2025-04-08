@@ -32,6 +32,17 @@ public class EntityTests
         (person1 == person2).Should().BeTrue();
         (person1 != person2).Should().BeFalse();
     }
+    
+    [Theory(DisplayName = @"GIVEN two entites of type and subtype, WHEN id is equal, SHOULD be satisfied")]
+    [InlineData(1, "Name", 1, "Name")]
+    [InlineData(2, "Name", 2, "Name")]
+    public void Given_entities_when_id_equal_and_inherited_type_equal_should_be_satisfied(long id1, string name1, long id2, string name2)
+    {
+        var person1 = new Person(id1, name1);
+        var person2 = new Company(id2, name2);
+
+        person1.IsSatisfiedBy(person2).Should().BeTrue();
+    }
 
     [Theory(DisplayName = @"GIVEN entity, WHEN id is not null, SHOULD return id hashcode")]
     [InlineData(1, "Name 1")]

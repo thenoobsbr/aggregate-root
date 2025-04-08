@@ -15,3 +15,14 @@ public class Person : AggregateRoot<long, Guid>
 
     public string Name { get; }
 }
+
+public class Company : Person
+{
+    public Company(long id, string name) : base(id, name)
+    {
+    }
+
+    public Company(string name) : base(name)
+    {
+    }
+}

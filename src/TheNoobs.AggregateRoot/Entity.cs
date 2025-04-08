@@ -6,8 +6,12 @@
 /// <typeparam name="TId">The type of the entity identification.</typeparam>
 public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatable<TId>
 {
+    #if NET9_0
+    private readonly Guid _transientId = Guid.CreateVersion7();
+    #else
     private readonly Guid _transientId = Guid.NewGuid();
-
+    #endif
+    
     /// <summary>
     /// Initializes a new instance, explicitly setting an identification.
     /// </summary>
@@ -46,7 +50,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
             return true;
         }
 
-        if (other.GetType() != GetType())
+        if (GetType() != other.GetType())
         {
             return false;
         }
@@ -67,6 +71,38 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     public override bool Equals(object? obj)
     {
         return obj is Entity<TId> other && Equals(other);
+    }
+
+    /// <summary>
+    /// Specify if current entity is satisfied by another entity.
+    /// It almost equivalent to Equals method. But it returns true
+    /// when the other instance inherits the current type.
+    /// </summary>
+    /// <param name="other">Other entity instance.</param>
+    /// <returns>True if <paramref name="other"/> is equal to the current instance.</returns>
+    public bool IsSatisfiedBy(Entity<TId>? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        if (!GetType().IsInstanceOfType(other))
+        {
+            return false;
+        }
+
+        if (Equals(Id, default(TId)) || Equals(other.Id, default(TId)))
+        {
+            return false;
+        }
+
+        return other.Id.Equals(Id);
     }
 
     /// <summary>
@@ -169,7 +205,11 @@ public abstract class Entity<TId, TExternalId> : Entity<TId>
         
         if (typeof(TExternalId) == typeof(Guid))
         {
+            #if NET9_0_OR_GREATER
+            externalId = Guid.CreateVersion7();
+            #else
             externalId = Guid.NewGuid();
+            #endif
         }
 
         if (externalId is not null)
