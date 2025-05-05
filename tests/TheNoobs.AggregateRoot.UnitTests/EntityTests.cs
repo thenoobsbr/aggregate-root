@@ -141,11 +141,10 @@ public class EntityTests
         if (Guid.TryParse(order.ExternalId, out var externalIdAsGuid))
         {
             externalIdAsGuid.Should().NotBeEmpty();
+            return;
         }
-        else
-        {
-            Execute.Assertion.FailWith("External Id is not a valid Guid.");
-        }
+
+        throw new Exception("External Id is not a valid Guid.");
     }
 
     [Fact(DisplayName = 

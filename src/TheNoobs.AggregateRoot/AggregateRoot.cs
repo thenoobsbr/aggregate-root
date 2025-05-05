@@ -36,9 +36,11 @@ public abstract class AggregateRoot<TId> : Entity<TId>, IAggregateRoot where TId
         _domainEvents.Add(domainEvent);
     }
     
-    void IAggregateRoot.ClearDomainEvents()
+    IReadOnlyCollection<IDomainEvent> IAggregateRoot.ClearDomainEvents()
     {
+        var events = _domainEvents.ToList();
         _domainEvents.Clear();
+        return events;
     }
 }
 
@@ -83,8 +85,10 @@ public abstract class AggregateRoot<TId, TExternalId> : Entity<TId, TExternalId>
         _domainEvents.Add(domainEvent);
     }
     
-    void IAggregateRoot.ClearDomainEvents()
+    IReadOnlyCollection<IDomainEvent> IAggregateRoot.ClearDomainEvents()
     {
+        var events = _domainEvents.ToList();
         _domainEvents.Clear();
+        return events;
     }
 }

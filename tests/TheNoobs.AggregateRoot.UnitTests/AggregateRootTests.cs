@@ -10,9 +10,10 @@ public class AggregateRootTests
     public void Given_aggregate_root_should_clear_domain_event()
     {
         IAggregateRoot person = new Person("Name");
-        person.ClearDomainEvents();
+        var domainEvents = person.ClearDomainEvents();
 
         person.DomainEvents.Should().BeEmpty();
+        domainEvents.Should().NotBeEmpty();
     }
 
     [Fact(DisplayName = @"GIVEN aggregate_root, SHOULD raise domain event")]
