@@ -8,6 +8,59 @@ namespace TheNoobs.AggregateRoot.UnitTests;
 [Trait("Class", "Entity")]
 public class EntityTests
 {
+    [Fact(DisplayName = @"GIVEN an Entity, SHOULD set created at to UTC now")]
+    public void Given_entity_should_set_created_at_to_utc_now()
+    {
+        var person = new Person("Name of person");
+
+        person.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(100));
+    }
+    
+    [Fact(DisplayName = @"GIVEN an Entity, SHOULD set updated at to UTC now")]
+    public void Given_entity_should_set_updated_at_to_utc_now()
+    {
+        var person = new Person("Name of person");
+
+        person.UpdatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(100));
+    }
+
+    [Fact(DisplayName = @"GIVEN an Entity and created at, SHOULD store in created at and updated at")]
+    public void Given_entity_and_created_at_should_store_in_created_at_and_updated_at()
+    {
+        var createdAt = DateTimeOffset.UtcNow;
+        
+        var person = new Person(1, "Name of person", createdAt);
+
+        person.CreatedAt.Should().Be(createdAt);
+        person.UpdatedAt.Should().Be(createdAt);
+    }
+    
+    [Fact(DisplayName = @"GIVEN an Entity, SHOULD be able to set updated at to now")]
+    public void Given_entity_should_be_able_to_set_updated_at_to_now()
+    {
+        var createdAt = DateTimeOffset.MinValue;
+        
+        var person = new Person(1, "Name of person", createdAt);
+
+        person.SetUpdatedAtToNow();
+        
+        person.UpdatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(100));
+        person.CreatedAt.Should().Be(createdAt);
+    }
+    
+    [Fact(DisplayName = @"GIVEN an Entity, SHOULD be able to set updated at to now")]
+    public void Given_entity_should_be_able_to_set_updated_at_to_utc_now()
+    {
+        var createdAt = DateTimeOffset.MinValue;
+        
+        var person = new Person(1, "Name of person", createdAt);
+
+        person.SetUpdatedAtToUtcNow();
+        
+        person.UpdatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(100));
+        person.CreatedAt.Should().Be(createdAt);
+    }
+    
     [Theory(DisplayName = @"GIVEN an Entity, SHOULD instantiate")]
     [InlineData(1, "Name of the first person")]
     [InlineData(2, "Name of the second person")]

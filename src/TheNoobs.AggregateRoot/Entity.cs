@@ -13,12 +13,23 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     #endif
     
     /// <summary>
-    /// Initializes a new instance, explicitly setting an identification.
+    /// Initializes a new instance, explicitly setting an identification and creation timestamp.
     /// </summary>
     /// <param name="id">Entity identification.</param>
-    protected Entity(TId id)
+    /// <param name="createdAt">Entity creation timestamp.</param>
+    protected Entity(TId id, DateTimeOffset createdAt)
     {
         Id = id;
+        CreatedAt = UpdatedAt = createdAt;
+    }
+    
+    /// <summary>
+    /// Initializes a new instance, explicitly setting an identification.
+    /// The creation date will be set to UTC now.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    protected Entity(TId id) : this(id, DateTimeOffset.UtcNow)
+    {
     }
 
     /// <summary>
@@ -32,6 +43,26 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     /// Get Identification.
     /// </summary>
     public TId Id { get; private set; }
+    
+    public DateTimeOffset CreatedAt { get; private set; }
+    
+    public DateTimeOffset UpdatedAt { get; private set; }
+    
+    /// <summary>
+    /// Sets updated at to UTC now.
+    /// </summary>
+    public void SetUpdatedAtToUtcNow()
+    {
+        UpdatedAt = DateTimeOffset.UtcNow;
+    }
+
+    /// <summary>
+    /// Sets updated at to now (using the computer's local time zone).
+    /// </summary>
+    public void SetUpdatedAtToNow()
+    {
+        UpdatedAt = DateTimeOffset.Now;
+    }
 
     /// <summary>
     /// Compare current entity to another entity.
@@ -159,12 +190,33 @@ public abstract class Entity<TId, TExternalId> : Entity<TId>
     }
 
     /// <summary>
+    /// Initializes a new instance, explicitly setting an identification and creation timestamp.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    /// <param name="createdAt">Entity creation timestamp.</param>
+    protected Entity(TId id, DateTimeOffset createdAt) : base(id, createdAt)
+    {
+        InitializeExternalId();
+    }
+
+    /// <summary>
     /// Initializes a new instance, explicitly setting an identification.
     /// </summary>
     /// <param name="id">Entity identification.</param>
     protected Entity(TId id) : base(id)
     {
         InitializeExternalId();
+    }
+    
+    /// <summary>
+    /// Initializes a new instance, explicitly setting identification, external identification and creation timestamp.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    /// <param name="externalId">Entity external identification.</param>
+    /// <param name="createdAt">Entity creation timestamp.</param>
+    protected Entity(TId id, TExternalId externalId, DateTimeOffset createdAt) : base(id, createdAt)
+    {
+        ExternalId = externalId;
     }
 
     /// <summary>
