@@ -7,6 +7,11 @@ public class Person : AggregateRoot<long, Guid>
         Name = name;
     }
 
+    public Person(long id, string name, DateTimeOffset createdAt) : base(id, createdAt)
+    {
+        Name = name;
+    }
+
     public Person(string name)
     {
         Name = name;

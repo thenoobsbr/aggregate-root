@@ -59,6 +59,25 @@ public abstract class AggregateRoot<TId, TExternalId> : Entity<TId, TExternalId>
     }
     
     /// <summary>
+    /// Initializes a new instance, explicitly setting an identification and creation timestamp.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    /// <param name="createdAt">Entity creation timestamp.</param>
+    protected AggregateRoot(TId id, DateTimeOffset createdAt) : base(id, createdAt)
+    {
+    }
+    
+    /// <summary>
+    /// Initializes a new instance, explicitly setting identification, external identification and creation timestamp.
+    /// </summary>
+    /// <param name="id">Entity identification.</param>
+    /// <param name="externalId">Entity external identification.</param>
+    /// <param name="createdAt">Entity creation timestamp.</param>
+    protected AggregateRoot(TId id, TExternalId externalId, DateTimeOffset createdAt) : base(id, externalId, createdAt)
+    {
+    }
+    
+    /// <summary>
     /// Initializes a new instance, explicitly setting both identification and external identification.
     /// </summary>
     /// <param name="id">Aggregate root identification.</param>
