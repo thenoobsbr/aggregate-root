@@ -1,5 +1,6 @@
 using FluentAssertions;
 using FluentAssertions.Execution;
+using TheNoobs.AggregateRoot.Abstractions;
 using TheNoobs.AggregateRoot.UnitTests.Stubs;
 
 namespace TheNoobs.AggregateRoot.UnitTests;
@@ -154,5 +155,22 @@ public class EntityTests
         Action act = () => _ = new OrderItem(1);
 
         act.Should().Throw<NotSupportedException>();
+    }
+    
+    [Fact(DisplayName = @"GIVEN entity, WHEN set id, SHOULD set id")]
+    public void Given_entity_when_set_id_should_set_id()
+    {
+        var person = new Person("Name of person");
+        (person as IIdSetter).SetId(1L);
+        person.Id.Should().Be(1);
+    }
+
+    [Fact(DisplayName = @"GIVEN entity, WHEN set id, SHOULD throw exception when id is already set")]
+    public void Given_entity_when_set_id_should_throw_exception_when_id_is_already_set()
+    {
+        var person = new Person(1, "Name of person");
+        Action act = () => (person as IIdSetter).SetId(2L);
+
+        act.Should().Throw<InvalidOperationException>();
     }
 }

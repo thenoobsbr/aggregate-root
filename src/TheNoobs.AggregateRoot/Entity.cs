@@ -1,10 +1,12 @@
-﻿namespace TheNoobs.AggregateRoot;
+﻿using TheNoobs.AggregateRoot.Abstractions;
+
+namespace TheNoobs.AggregateRoot;
 
 /// <summary>
 /// Abstract class of entity.
 /// </summary>
 /// <typeparam name="TId">The type of the entity identification.</typeparam>
-public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatable<TId>
+public abstract class Entity<TId> : IEquatable<Entity<TId>>, IIdSetter where TId : IEquatable<TId>
 {
     #if NET9_0
     private readonly Guid _transientId = Guid.CreateVersion7();
@@ -32,6 +34,19 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     /// Get Identification.
     /// </summary>
     public TId Id { get; private set; }
+
+    /// <summary>
+    /// Internal set ID for seed, if required.
+    /// </summary>
+    /// <param name="id"></param>
+    void IIdSetter.SetId(object id)
+    {
+        if (!Equals(Id, default(TId)))
+        {
+            throw new InvalidOperationException("Id has already been set");
+        }
+        Id = (TId)id;
+    }
 
     /// <summary>
     /// Compare current entity to another entity.
@@ -111,7 +126,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     /// <param name="left">First value object.</param>
     /// <param name="right">Last value object.</param>
     /// <returns>True if <paramref name="left"/> is equal to <paramref name="right"/>.</returns>
-    public static bool operator ==(Entity<TId> left, Entity<TId> right)
+    public static bool operator ==(Entity<TId>? left, Entity<TId>? right)
     {
         if (ReferenceEquals(left, null) && ReferenceEquals(right, null)) return true;
         if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
@@ -124,7 +139,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     /// <param name="left">First value object.</param>
     /// <param name="right">Last value object.</param>
     /// <returns>True if <paramref name="left"/> is equal to <paramref name="right"/>.</returns>
-    public static bool operator !=(Entity<TId> left, Entity<TId> right)
+    public static bool operator !=(Entity<TId>? left, Entity<TId>? right)
     {
         return !(left == right);
     }
