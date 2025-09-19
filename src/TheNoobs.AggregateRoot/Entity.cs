@@ -111,7 +111,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     /// <param name="left">First value object.</param>
     /// <param name="right">Last value object.</param>
     /// <returns>True if <paramref name="left"/> is equal to <paramref name="right"/>.</returns>
-    public static bool operator ==(Entity<TId> left, Entity<TId> right)
+    public static bool operator ==(Entity<TId>? left, Entity<TId>? right)
     {
         if (ReferenceEquals(left, null) && ReferenceEquals(right, null)) return true;
         if (ReferenceEquals(left, null) || ReferenceEquals(right, null)) return false;
@@ -124,7 +124,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>> where TId : IEquatab
     /// <param name="left">First value object.</param>
     /// <param name="right">Last value object.</param>
     /// <returns>True if <paramref name="left"/> is equal to <paramref name="right"/>.</returns>
-    public static bool operator !=(Entity<TId> left, Entity<TId> right)
+    public static bool operator !=(Entity<TId>? left, Entity<TId>? right)
     {
         return !(left == right);
     }
