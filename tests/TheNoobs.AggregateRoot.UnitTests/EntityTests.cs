@@ -54,6 +54,21 @@ public class EntityTests
 
         person.GetHashCode().Should().Be(id.GetHashCode());
     }
+    
+    [Fact(DisplayName = @"GIVEN an Entity, SHOULD be able to compare to nullable entity variable")]
+    public void Given_entity_variable_should_be_able_to_compare_to_nullable_entity_variable()
+    {
+        var person = new Person("Name of person");
+        Person? nullablePerson = null;
+        
+        (person == nullablePerson).Should().BeFalse();
+        (person != nullablePerson).Should().BeTrue();
+
+        nullablePerson = person;
+        
+        (person == nullablePerson).Should().BeTrue();
+        (person != nullablePerson).Should().BeFalse();
+    }
 
     [Theory(DisplayName = @"GIVEN entity, WHEN transient, SHOULD return base class hashcode")]
     [InlineData("Name 1")]
